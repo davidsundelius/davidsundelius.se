@@ -16,4 +16,4 @@ addons:
       - sshpass
 after_success:
   - export SSHPASS=$DEPLOY_PASS
-  - sshpass -e scp -r build/* $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+  - sshpass -e scp -r -v build/* $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH

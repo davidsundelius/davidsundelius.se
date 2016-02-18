@@ -1,21 +1,23 @@
 module.exports = function(grunt) {
-  var destination = 'public/assets/build',
+  var destination = 'build',
       //Temp
-      baseTmp     = 'src/tmp',
-      tmpJs       = baseTmp+'/*.js',
-      tmpConcat   = baseTmp+'/concat.js',
+      baseTmp       = 'src/tmp',
+      tmpJs         = baseTmp+'/*.js',
+      tmpConcat     = baseTmp+'/concat.js',
       //JS
-      baseJs      = 'src/js',
-      srcJs       = baseJs+'/**/*.js',
-      srcSpecs    = baseJs+'/**/*.spec.js',
-      minJs       = destination+'/core.js',
+      baseJs        = 'src/js',
+      srcJs         = baseJs+'/**/*.js',
+      srcSpecs      = baseJs+'/**/*.spec.js',
+      minJs         = destination+'/assets/core.js',
       //Sass
-      baseSass    = 'src/sass',
-      srcSass     = baseSass+'base.scss',
-      minSass     = destination+'/core.css',
+      baseSass      = 'src/sass',
+      srcSass       = baseSass+'/base.scss',
+      minSass       = destination+'/assets/core.css',
+      //Templates
+      baseTemplates = 'src/templates',
       //Tests
-      baseTests   = 'test',
-      testBuild   = baseTests+'/build.conf.js',
+      baseTests     = 'test',
+      testBuild     = baseTests+'/build.conf.js',
       //Compiler options
       compilerPath = 'node_modules/google-closure-compiler',
       compilation_level = 'SIMPLE_OPTIMIZATIONS',
@@ -60,24 +62,33 @@ module.exports = function(grunt) {
 
     jshint: {
       options: {
-	jshintrc: true
+	      jshintrc: true
       },
       build: [srcJs]
     },
 
-    clean: [destination],
-
-    gitpull: {
-      main: {
+    copy: {
+      copyClosureCompilerJar: {
+        src: 'node_modules/google-closure-compiler/compiler.jar',
+        dest: 'node_modules/google-closure-compiler/build/compiler.jar',
+        filter: 'isFile'
+      },
+      deployTemplates: {
+        expand: true,
+        cwd: baseTemplates,
+        src: ['**/*.html'],
+        dest: destination + '/'
       }
-    }
+    },
+
+    clean: [destination]
   });
 
   require('load-grunt-tasks')(grunt);
-  grunt.registerTask('js',      ['concat:nominify']);
-  grunt.registerTask('css',     ['clean']);
-  grunt.registerTask('test',    ['jshint:build']);
-  grunt.registerTask('build',   ['test', 'clean', 'css', 'js']);
-  grunt.registerTask('deploy',  ['gitpull:main','build']);
-  grunt.registerTask('default', ['build']);
+  grunt.registerTask('js',        ['concat:nominify']);
+  grunt.registerTask('css',       ['clean']);
+  grunt.registerTask('templates', ['copy:deployTemplates']);
+  grunt.registerTask('test',      ['jshint:build']);
+  grunt.registerTask('build',     ['test', 'clean', 'css', 'templates', 'js']);
+  grunt.registerTask('default',   ['build']);
 };

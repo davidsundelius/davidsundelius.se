@@ -15,6 +15,8 @@ module.exports = function(grunt) {
       minSass       = destination+'/assets/core.css',
       //Templates
       baseTemplates = 'src/templates',
+      //Static
+      baseStatic    = 'src/static',
       //Tests
       baseTests     = 'test',
       testBuild     = baseTests+'/build.conf.js',
@@ -78,7 +80,13 @@ module.exports = function(grunt) {
         cwd: baseTemplates,
         src: ['**/*.html'],
         dest: destination + '/'
-      }
+      },
+      deployStatic: {
+        expand: true,
+        cwd: baseStatic,
+        src: ['img/**/*'],
+        dest: destination + '/assets/'
+      },
     },
 
     clean: [destination]
@@ -88,7 +96,8 @@ module.exports = function(grunt) {
   grunt.registerTask('js',        ['concat:nominify']);
   grunt.registerTask('css',       ['clean']);
   grunt.registerTask('templates', ['copy:deployTemplates']);
+  grunt.registerTask('static',    ['copy:deployStatic']);
   grunt.registerTask('test',      ['jshint:build']);
-  grunt.registerTask('build',     ['test', 'clean', 'css', 'templates', 'js']);
+  grunt.registerTask('build',     ['test', 'clean', 'css', 'static', 'templates', 'js']);
   grunt.registerTask('default',   ['build']);
 };

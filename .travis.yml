@@ -9,7 +9,4 @@ addons:
     packages:
       - sshpass
 after_success:
-  - ping -c3 $DEPLOY_HOST
-  - echo $DEPLOY_PATH
-  - echo $DEPLOY_USER
-  - sshpass -e scp -r build/* $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+  - sshpass -e scp -o StrictHostKeyChecking=no -r build/* $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH

@@ -12,7 +12,9 @@ module.exports = function(grunt) {
       //Sass
       baseSass      = 'src/sass',
       srcSass       = baseSass+'/base.scss',
-      minSass       = destination+'/assets/core.css',
+      dstSass       = baseSass+'/css/sass.css',
+      srcCss        = baseSass+'/css/*.css',
+      minCss        = destination+'/assets/core.css',
       //Templates
       baseTemplates = 'src/templates',
       //Static
@@ -45,6 +47,10 @@ module.exports = function(grunt) {
       nominify: {
         src: [tmpJs, srcJs, '!'+srcSpecs],
         dest: minJs
+      },
+      css: {
+        src: [srcCss],
+        dest: minCss
       }
     },
 
@@ -94,7 +100,7 @@ module.exports = function(grunt) {
 
   require('load-grunt-tasks')(grunt);
   grunt.registerTask('js',        ['concat:nominify']);
-  grunt.registerTask('css',       ['clean']);
+  grunt.registerTask('css',       ['concat:css']);
   grunt.registerTask('templates', ['copy:deployTemplates']);
   grunt.registerTask('static',    ['copy:deployStatic']);
   grunt.registerTask('test',      ['jshint:build']);

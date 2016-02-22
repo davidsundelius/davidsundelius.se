@@ -1,0 +1,20 @@
+body {
+  min-height: 600px;
+  padding-top: 70px;
+}
+
+@keyframes fadeInDown {
+  from {
+    margin-top: 30px;
+    opacity: 0;
+  }
+  to {
+    margin-top: 0px;
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation-name: fadeInDown;
+  animation-duration: 1s;
+}
